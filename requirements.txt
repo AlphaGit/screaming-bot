@@ -1,0 +1,6 @@
+markovify==0.7.1
+requests
+html2text
+oauth2
+spacy
+nltk
