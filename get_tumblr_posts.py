@@ -15,12 +15,13 @@ def append_to_file(filename, contents):
 
 def clean_up(text):
     text = text.replace('\n', '')
-    text = re.sub(r'\!?\[.*\]\(.+\)', '', text)
+    text = re.sub(r'\!?\[.*\]\(.+\):?', '', text)
     text = text.replace('*', '')
     text = text.replace('_', '')
     text = text.replace('~', '')
     text = text.replace('>', '')
     text = text.replace('#', '')
+    text = text.strip()
     return text
 
 for blog in blogs_to_search:
@@ -42,7 +43,11 @@ for blog in blogs_to_search:
 
         for post in posts:
             body = html2text(post["body"])
+
             text = clean_up(body)
+            if (len(text) == 0):
+                continue
+
             print(text)
             print("********")
             append_to_file('text_source.txt', text)
