@@ -33,6 +33,11 @@ class NltkText(markovify.Text):
     def word_join(self, words):
         return " ".join(word.split("::")[0] for word in words)
 
+def get_scream():
+    scream_length = random.randint(5, 12)
+    exclamation_length = random.randint(1, 5)
+
+    return ('A' * scream_length) + 'HHH' + ('!' * exclamation_length)
 
 print('loading text...')
 with open('text_source.txt', 'r', encoding='utf8') as f:
@@ -44,7 +49,7 @@ post = None
 while post is None:
     post = text_model.make_sentence()
 
-post = "AAAAAAAAAAAAAAHHH!!!\n\n" + post + "\n\nAAAAAAAAAAAAAAHHH!!!"
+post = get_scream() + "\n\n" + post + "\n\n" + get_scream()
 post = post.upper()
 
 print(f"Generated post: {post}")
