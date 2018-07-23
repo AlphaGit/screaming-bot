@@ -14,8 +14,8 @@ def append_to_file(filename, contents):
         file.write(contents)
 
 def clean_up(text):
-    text = text.replace('\n', ' ')
-    text = re.sub(r'\!?\[.*\]\(.+\)', ' ', text)
+    text = text.replace('\n', '')
+    text = re.sub(r'\!?\[.*\]\(.+\)', '', text)
     text = text.replace('*', '')
     text = text.replace('_', '')
     text = text.replace('~', '')

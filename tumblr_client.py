@@ -12,7 +12,7 @@ def get(url):
 
 def get_posts_from_blog(blog, before):
     consumer_key = auth['consumer_key']
-    response = get(f'https://api.tumblr.com/v2/blog/{blog}.tumblr.com/posts/text?api_key={consumer_key}&before={before}&filter=text')
+    response = get(f'https://api.tumblr.com/v2/blog/{blog}.tumblr.com/posts/text?api_key={consumer_key}&before={before}')
     return response['posts']
 
 def create_post(blog, post_content, post_tags=[]):
