@@ -21,7 +21,7 @@ def create_post(blog, post_content, post_tags=[]):
         oauth2.Token(key=auth['oauth_token'], secret=auth['oauth_token_secret'])
     )
 
-    client.request(
+    response, _ = client.request(
         f'https://api.tumblr.com/v2/blog/{blog}/post',
         method='POST',
         body=urllib.parse.urlencode({
@@ -29,6 +29,8 @@ def create_post(blog, post_content, post_tags=[]):
             'state': 'queue',
             'body': post_content,
             'tags': ','.join(post_tags),
-            'format': 'markdown'
+            'format': 'html'
         })
     )
+
+    print(f"Response: {response['status']}")

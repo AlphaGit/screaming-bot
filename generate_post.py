@@ -49,9 +49,7 @@ post = None
 while post is None:
     post = text_model.make_sentence()
 
-post = get_scream() + "\n\n" + post + "\n\n" + get_scream()
-post = post.upper()
-
 print(f"Generated post: {post}")
 
-tumblr_client.create_post('screaming-bot', post, settings.tags_to_post)
+html_post = f"<p>{get_scream()}</p><p>{post.upper()}</p><p>{get_scream()}</p>"
+tumblr_client.create_post('screaming-bot', html_post, settings.tags_to_post)
