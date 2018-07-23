@@ -1,0 +1,7 @@
+text_source.txt
+settings.py
+settings.py.tpl
+.git
+.gitignore
+.vscode/
+*.cmd

@@ -24,7 +24,19 @@
         {
             "label": "build docker image",
             "type": "shell",
-            "command": "docker build .",
+            "command": "./create_image.cmd",
+            "problemMatcher": []
+        },
+        {
+            "label": "create docker containers",
+            "type": "shell",
+            "command": "./create_containers.cmd",
+            "problemMatcher": []
+        },
+        {
+            "label": "delete docker containers",
+            "type": "shell",
+            "command": "./delete_containers.cmd",
             "problemMatcher": []
         }
     ]
