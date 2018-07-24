@@ -19,9 +19,6 @@ class SpacyText(markovify.Text):
         return " ".join(word.split("::")[0] for word in words)
 
 class NltkText(markovify.Text):
-    def __init__(self, file):
-        markovify.Text.__init__(self, file)
-
     def word_split(self, sentence):
         words = re.split(self.word_split_pattern, sentence)
         if words[0] != "":
@@ -39,15 +36,21 @@ def get_scream():
 
     return ('A' * scream_length) + 'HHH' + ('!' * exclamation_length)
 
-print('loading text...')
+print('loading gutenberg corpora...')
+gutenberg_texts = " ".join([ " ".join(nltk.corpus.gutenberg.words(f)) for f in nltk.corpus.gutenberg.fileids() ])
+gutenberg_model = NltkText(gutenberg_texts)
 with open('text_source.txt', 'r', encoding='utf8') as f:
     #text_model = markovify.Text(f)
     #text_model = SpacyText(f)
-    text_model = NltkText(f)
+    print('loading tumblr corpora...')
+    tumblr_text_model = NltkText(f)
+    text_model = markovify.combine([tumblr_text_model, gutenberg_model ], [ 2, 1 ])
 
 post = None
 while post is None:
     post = text_model.make_sentence()
+
+post = re.sub(r'([\.\?\!\)\(])(\w)', r'\1 \2', post)
 
 print(f"Generated post: {post}")
 

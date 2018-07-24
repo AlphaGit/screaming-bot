@@ -15,6 +15,11 @@ def get_posts_from_blog(blog, before):
     response = get(f'https://api.tumblr.com/v2/blog/{blog}.tumblr.com/posts/text?api_key={consumer_key}&before={before}')
     return response['posts']
 
+def get_posts_from_search(search, before):
+    consumer_key = auth['consumer_key']
+    response = get(f'https://api.tumblr.com/v2/tagged?api_key={consumer_key}&tag={search}&before={before}')
+    return response
+
 def create_post(blog, post_content, post_tags=[]):
     client = oauth2.Client(
         oauth2.Consumer(key=auth['consumer_key'], secret=auth['consumer_secret']),

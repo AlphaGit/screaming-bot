@@ -7,7 +7,7 @@ import tumblr_client
 from html2text import html2text
 from datetime import datetime
 
-from settings import blogs_to_search
+from settings import blogs_to_search, posts_per_blog, tags_to_search, posts_per_search
 
 def append_to_file(filename, contents):
     with open(filename, 'a', encoding='utf8') as file:
@@ -24,13 +24,13 @@ def clean_up(text):
     text = text.strip()
     return text
 
-for blog in blogs_to_search:
+def get_posts(search_function, search_parameter, post_search_limit):
     total = 0
     earliest = int(datetime.now().timestamp())
     iterations_without_posts = 0
 
-    while total <= 100 and iterations_without_posts < 10:
-        posts = tumblr_client.get_posts_from_blog(blog, earliest)
+    while total <= post_search_limit and iterations_without_posts < 5:
+        posts = search_function(search_parameter, earliest)
 
         if len(posts) > 0:
             earliest = min([ post["timestamp"] for post in posts ])
@@ -38,14 +38,14 @@ for blog in blogs_to_search:
             break
 
         posts = [ post for post in posts if post["type"] == "text" ]
-        if (len(posts) == 0):
+        if len(posts) == 0:
             iterations_without_posts += 1
 
         for post in posts:
             body = html2text(post["body"])
 
             text = clean_up(body)
-            if (len(text) == 0):
+            if len(text) == 0:
                 continue
 
             print(text)
@@ -53,4 +53,10 @@ for blog in blogs_to_search:
             append_to_file('text_source.txt', text)
             total += 1
 
-    print(f'No more posts found from {blog}. Total found: {total}.')
+    print(f'No more posts found for {search_parameter}. Total found: {total}.')
+
+for blog in blogs_to_search:
+    get_posts(tumblr_client.get_posts_from_blog, blog, posts_per_blog)
+
+for tag in tags_to_search:
+    get_posts(tumblr_client.get_posts_from_search, tag, posts_per_search)
