@@ -11,7 +11,7 @@ from settings import blogs_to_search, posts_per_blog, tags_to_search, posts_per_
 
 def append_to_file(filename, contents):
     with open(filename, 'a', encoding='utf8') as file:
-        file.write(contents)
+        file.writelines(contents + '\n')
 
 def clean_up(text):
     text = text.replace('\n', '')
