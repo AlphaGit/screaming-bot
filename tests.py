@@ -1,5 +1,5 @@
 import unittest
-from functions import *
+from functions import clean_up
 
 class TestCleanup(unittest.TestCase):
     def test_html_tags(self):
