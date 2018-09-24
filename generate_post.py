@@ -1,22 +1,22 @@
 import markovify
-import spacy
+# import spacy
 import random
 import tumblr_client
 import settings
 import re
 import nltk
 
-class SpacyText(markovify.Text):
-    def __init__(self, file):
-        markovify.Text.__init__(self, file)
-        print('loading spacy en nlp module...')
-        self.__nlp = spacy.load('en')
+# class SpacyText(markovify.Text):
+#     def __init__(self, file):
+#         markovify.Text.__init__(self, file)
+#         print('loading spacy en nlp module...')
+#         self.__nlp = spacy.load('en')
 
-    def word_split(self, sentence):
-        return [ "::".join((word.orth_, word.pos_)) for word in self.__nlp(sentence) ]
+#     def word_split(self, sentence):
+#         return [ "::".join((word.orth_, word.pos_)) for word in self.__nlp(sentence) ]
 
-    def word_join(self, words):
-        return " ".join(word.split("::")[0] for word in words)
+#     def word_join(self, words):
+#         return " ".join(word.split("::")[0] for word in words)
 
 class NltkText(markovify.Text):
     def word_split(self, sentence):
@@ -31,10 +31,10 @@ class NltkText(markovify.Text):
         return " ".join(word.split("::")[0] for word in words)
 
 def get_scream():
-    scream_length = random.randint(5, 12)
-    exclamation_length = random.randint(1, 5)
+    scream_length = random.randint(7, 20)
+    exclamation_length = random.randint(3, 10)
 
-    return ('A' * scream_length) + 'HHH' + ('!' * exclamation_length)
+    return ('A' * scream_length) + 'HHHHHH' + ('!' * exclamation_length)
 
 print('loading gutenberg corpora...')
 gutenberg_texts = " ".join([ " ".join(nltk.corpus.gutenberg.words(f)) for f in nltk.corpus.gutenberg.fileids() ])

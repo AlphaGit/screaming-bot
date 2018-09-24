@@ -1,5 +1,5 @@
 markovify==0.7.1
 requests
 oauth2
-spacy
+# spacy
 nltk
