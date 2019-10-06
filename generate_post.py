@@ -1,10 +1,21 @@
-import markovify
 # import spacy
+import markovify
 import random
 import tumblr_client
-import settings
 import re
 import nltk
+import os
+import boto3
+
+tags_to_post = os.environ['TAGS_TO_POST'].split(',')
+
+s3_bucket_name = os.environ['S3_BUCKET_NAME']
+s3_file_path = os.environ['S3_TEXT_FILE_PATH']
+
+local_file_path = '/tmp/text_source.txt'
+
+s3 = boto3.client('s3')
+s3.download_file(s3_bucket_name, s3_file_path, local_file_path)
 
 # class SpacyText(markovify.Text):
 #     def __init__(self, file):
@@ -39,7 +50,8 @@ def get_scream():
 print('loading gutenberg corpora...')
 gutenberg_texts = " ".join([ " ".join(nltk.corpus.gutenberg.words(f)) for f in nltk.corpus.gutenberg.fileids() ])
 gutenberg_model = NltkText(gutenberg_texts)
-with open('text_source.txt', 'r', encoding='utf8') as f:
+
+with open(local_file_path, 'r', encoding='utf8') as f:
     #text_model = markovify.Text(f)
     #text_model = SpacyText(f)
     print('loading tumblr corpora...')
@@ -55,4 +67,4 @@ post = re.sub(r'([\.\?\!\)\(])(\w)', r'\1 \2', post)
 print(f"Generated post: {post}")
 
 html_post = f"<p>{get_scream()}</p><p>{post.upper()}</p><p>{get_scream()}</p>"
-tumblr_client.create_post('screaming-bot', html_post, settings.tags_to_post)
+tumblr_client.create_post('screaming-bot', html_post, tags_to_post)

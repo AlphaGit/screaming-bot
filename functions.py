@@ -70,7 +70,7 @@ def clean_up(text):
 
     return text
 
-def get_posts(search_function, search_parameter, post_search_limit):
+def get_posts(search_function, search_parameter, post_search_limit, file_name='text_source.txt'):
     total = 0
     earliest = int(datetime.now().timestamp())
     iterations_without_posts = 0
@@ -96,7 +96,7 @@ def get_posts(search_function, search_parameter, post_search_limit):
             print(body + "\n\n\n")
             print(text)
             print("****************************************")
-            append_to_file('text_source.txt', text)
+            append_to_file(file_name, text)
             total += 1
 
     print(f'No more posts found for {search_parameter}. Total found: {total}.')

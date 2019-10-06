@@ -3,3 +3,4 @@ requests
 oauth2
 # spacy
 nltk
+boto3
