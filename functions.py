@@ -5,10 +5,6 @@ import html
 
 from datetime import datetime
 
-def append_to_file(filename, contents):
-    with open(filename, 'a', encoding='utf8') as file:
-        file.writelines(contents + '\n')
-
 # inline tags keep text together visually (<b>S</b>ame)
 # non-inline tags keep text separate (<p>Sentence1</p><p>Sentence2</p>)
 html_tags_inline = {
@@ -70,22 +66,25 @@ def clean_up(text):
 
     return text
 
-def get_posts(search_function, search_parameter, post_search_limit, file_name='text_source.txt'):
+def get_posts(search_function, search_parameter, post_search_limit):
     total = 0
     earliest = int(datetime.now().timestamp())
-    iterations_without_posts = 0
+    iterations_without_text_posts = 0
 
-    while total <= post_search_limit and iterations_without_posts < 5:
+    posts_results = []
+
+    while total <= post_search_limit and iterations_without_text_posts < 5:
         posts = search_function(search_parameter, earliest)
 
-        if len(posts) > 0:
-            earliest = min([ post["timestamp"] for post in posts ])
-        else:
+        if len(posts) == 0:
             break
 
+        earliest = min([ post["timestamp"] for post in posts ])
         posts = [ post for post in posts if post["type"] == "text" ]
+
         if len(posts) == 0:
-            iterations_without_posts += 1
+            iterations_without_text_posts += 1
+            continue
 
         for post in posts:
             body = post["body"]
@@ -93,10 +92,12 @@ def get_posts(search_function, search_parameter, post_search_limit, file_name='t
             if len(text) == 0:
                 continue
 
-            print(body + "\n\n\n")
+            print(body + "\n\n")
             print(text)
             print("****************************************")
-            append_to_file(file_name, text)
+            posts_results.append(text + "\n")
             total += 1
 
     print(f'No more posts found for {search_parameter}. Total found: {total}.')
+
+    return posts_results
